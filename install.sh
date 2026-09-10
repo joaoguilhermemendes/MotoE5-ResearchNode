@@ -44,7 +44,7 @@ echo "  (pode demorar no primeiro install...)"
 echo ""
 
 # Usa python -m pip (mais confiável que pip direto no Termux)
-python -m pip install --upgrade pip
+# NÃO atualiza pip — o Termux gerencia via pkg
 python -m pip install rich psutil
 
 # ── 4. Torna scripts executáveis ──────────────────────

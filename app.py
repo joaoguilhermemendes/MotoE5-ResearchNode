@@ -108,8 +108,8 @@ class SetupScreen(Screen):
             yield Input(placeholder="joao", id="pc_user")
             yield Static("Porta SSH (default 22):", classes="field-label")
             yield Input(placeholder="22", id="pc_port")
-            yield Static("Senha do Windows (para sshpass, sem prompt):", classes="field-label")
-            yield Input(placeholder="senha", id="pc_pass", password=True)
+            yield Static("Senha do Windows (opcional; em branco = usa chave SSH):", classes="field-label")
+            yield Input(placeholder="(vazio) usa chave SSH", id="pc_pass", password=True)
             yield Button("Connect", id="connect", variant="primary")
             yield Static("", id="setup_status")
         yield Footer()
@@ -136,16 +136,13 @@ class SetupScreen(Screen):
             status.update("[red]Preencha IP e usuário do PC.[/red]")
             return
 
-        # Se o campo de senha ficou vazio mas já existe uma salva, mantém a antiga
+        # Senha em branco = tentar chave SSH (BatchMode, sem prompt).
+        # Se já houver senha salva de antes, mantém como fallback.
         if not password:
             password = load_ssh_config().get("password") or ""
 
-        if not password:
-            status.update("[red]Digite a senha do Windows.[/red]")
-            self.query_one("#pc_pass", Input).focus()
-            return
-
-        status.update("[yellow]Conectando ao PC...[/yellow]")
+        status.update("[yellow]Conectando ao PC...[/yellow]" if password
+                      else "[yellow]Conectando ao PC via chave...[/yellow]")
         event.button.disabled = True
         self.run_worker(
             partial(self._test_and_save, host, user, port, password),
@@ -154,20 +151,23 @@ class SetupScreen(Screen):
         )
 
     def _test_and_save(self, host: str, user: str, port: str, password: str) -> None:
+        method = "password" if password else "key"
         cfg = {"host": host, "user": user, "port": int(port), "password": password}
         ok, output = run_on_pc("echo RN_OK", cfg, timeout=20)
-        self.app.call_from_thread(self._finish, ok, output, cfg)
+        self.app.call_from_thread(self._finish, ok, output, cfg, method)
 
-    def _finish(self, ok: bool, output: str, cfg: dict) -> None:
+    def _finish(self, ok: bool, output: str, cfg: dict, method: str) -> None:
         status = self.query_one("#setup_status", Static)
         btn = self.query_one("#connect", Button)
         btn.disabled = False
         if ok:
+            cfg["method"] = method
             save_ssh_config(cfg)
             status.update("[green]Conectado! Abrindo Stream Deck...[/green]")
             self.app.switch_screen(StreamDeckScreen())
         else:
-            status.update(f"[red]Falha: {output}[/red]")
+            hint = " (se usar senha, digite-a no campo)" if method == "key" and "Permission" in output else ""
+            status.update(f"[red]Falha: {output}{hint}[/red]")
             btn.focus()
 
 
@@ -205,7 +205,8 @@ class StreamDeckScreen(Screen):
             return
         self._log(
             f"[dim]Conectado: {self._ssh.get('user')}@{self._ssh.get('host')}"
-            f":{self._ssh.get('port', 22)}[/dim]"
+            f":{self._ssh.get('port', 22)}"
+            f" ({self._ssh.get('method', '?')})[/dim]"
         )
 
     def _log(self, line: str) -> None:

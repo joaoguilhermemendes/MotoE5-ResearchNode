@@ -1,3 +1,4 @@
 rich>=13.0
+textual>=0.40
 # psutil é opcional — só necessário no Windows
 # No Termux/Linux, o dashboard usa /proc direto

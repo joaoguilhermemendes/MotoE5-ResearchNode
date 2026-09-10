@@ -123,11 +123,45 @@ export RN_SSH_USER=joao
 export RN_SSH_KEY=~/.ssh/id_rsa
 ```
 
+## Stream Deck (controle o PC com um toque)
+
+Rodar `python app.py` abre um painel com **botões que executam comandos no seu PC via SSH** (backup, pipelines, abrir programas) direto do Termux.
+
+```bash
+# No Termux:
+python app.py
+# 1ª vez: tela de setup → IP do PC, usuário e porta SSH
+# Depois: clique nos botões para rodar comandos no PC
+```
+
+### Configurar o PC (uma vez)
+
+- Instale o **OpenSSH Server** no Windows (Configurações → Apps → Recursos Opcionais).
+- Garanta que `sshd` está rodando (Porta 22).
+- O usuário/senha é o mesmo da conta do Windows (ou monte chaves SSH).
+
+### Editar os botões
+
+Os botões ficam em `config.py` → `STREAM_DECK`. Cada botão tem `label` (nome) e `command` (comando rodado NO PC):
+
+```python
+STREAM_DECK = [
+    {
+        "category": "Automation",
+        "buttons": [
+            {"label": "Backup", "command": "powershell -NoProfile -Command Write-Host backup-ok"},
+        ],
+    },
+]
+```
+
 ## Estrutura
 
 ```
 research-node/
-├── research_node.py      # Entry point
+├── research_node.py      # Entry point (dashboard Rich)
+├── app.py                # Stream Deck (Textual) — controla o PC via SSH
+├── styles.css            # Estilos do app.py
 ├── config.py             # Configuração (edite este!)
 ├── collectors/
 │   ├── system.py         # CPU, RAM, uptime, processos
@@ -202,6 +236,7 @@ python3 meu_pipeline.py --input dados.fastq
 
 - **Python 3** — linguagem principal
 - **Rich** — TUI framework (termos, painéis, layouts)
+- **Textual** — Stream Deck (botões, telas, worker threads)
 - **psutil** (opcional) — métricas de sistema (fallback: /proc)
 - **Termux** — terminal no Android
 - **Bash** — scripts de pipeline

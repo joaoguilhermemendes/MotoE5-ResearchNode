@@ -39,16 +39,17 @@ info "Instalando dependências do sistema..."
 pkg install -y python python-pip git curl
 
 # ── 3. Instala dependências Python ────────────────────
-info "Instalando dependências Python (rich)..."
+info "Instalando dependências Python (rich + textual)..."
 echo "  (pode demorar no primeiro install...)"
 echo ""
 
 # psutil NÃO funciona no Termux/Android — o dashboard usa /proc direto
-python -m pip install rich
+python -m pip install rich textual
 
 # ── 4. Torna scripts executáveis ──────────────────────
 info "Configurando scripts..."
 chmod +x research_node.py
+chmod +x app.py
 chmod +x pipelines/*.sh
 
 # ── 5. Cria diretórios de dados ───────────────────────
@@ -70,6 +71,14 @@ if python -c "import rich" 2>/dev/null; then
     RICH_OK=true
 else
     fail "rich NÃO instalado"
+fi
+
+TEXTUAL_OK=false
+if python -c "import textual" 2>/dev/null; then
+    ok "textual OK"
+    TEXTUAL_OK=true
+else
+    warn "textual NÃO instalado (app.py não vai rodar)"
 fi
 
 # psutil não é necessário no Termux — /proc funciona direto
@@ -99,7 +108,8 @@ echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━
 echo -e "${GREEN}✓ Research Node instalado!${NC}"
 echo ""
 echo "  Para rodar:"
-echo "    python research_node.py"
+echo "    python research_node.py     (dashboard Rich)"
+echo "    python app.py               (Stream Deck → controle o PC)"
 echo ""
 echo "  Para ver apenas pipelines:"
 echo "    python research_node.py --pipelines"

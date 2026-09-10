@@ -1,0 +1,85 @@
+/* Research Node — Stream Deck (Textual CSS) */
+
+Screen {
+    background: #0a0e14;
+}
+
+/* ─── Setup ─────────────────────────────── */
+#setup {
+    padding: 1 2;
+}
+
+.field-label {
+    margin: 0 0 1 0;
+    color: $text-muted;
+}
+
+#setup Input {
+    margin: 0 0 1 0;
+}
+
+#connect {
+    margin: 1 0;
+    width: 100%;
+}
+
+#setup_status {
+    margin: 1 0 0 0;
+    padding: 1 2;
+    height: 4;
+    border: round $primary;
+    background: $surface;
+}
+
+/* ─── Deck ──────────────────────────────── */
+#deck {
+    padding: 1 2;
+}
+
+.cat-title {
+    margin: 1 0 0 0;
+    text-style: bold;
+    color: $accent;
+}
+
+#deck-top {
+    margin: 0 0 1 0;
+    height: 3;
+}
+
+.deck-util {
+    width: 1fr;
+    margin: 0 1 0 0;
+}
+
+#deck Horizontal {
+    margin: 0 0 1 0;
+    height: 3;
+}
+
+.deck-btn {
+    width: 1fr;
+    margin: 0 1 0 0;
+}
+
+.deck-btn:disabled {
+    background: $panel;
+    color: $text-muted;
+}
+
+.deck-btn:hover {
+    background: $primary-background;
+    color: $text;
+}
+
+.output-panel {
+    height: 8;
+    margin: 1 0 0 0;
+    border: round $primary;
+    padding: 0 1;
+}
+
+#helpers {
+    margin: 1 0 0 0;
+    color: $text-muted;
+}

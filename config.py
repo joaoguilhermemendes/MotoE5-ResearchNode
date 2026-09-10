@@ -74,6 +74,61 @@ REMOTE_SSH_USER = os.environ.get("RN_SSH_USER", "")
 REMOTE_SSH_KEY = os.environ.get("RN_SSH_KEY", "")  # caminho da chave
 REMOTE_SSH_INTERVAL = 30  # segundos entre polls do PC remoto
 
+# ─── Stream Deck (controle do PC via SSH) ──────────────────
+# Botões exibidos no app.py (Textual). Cada categoria vira uma
+# seção na tela. O comando roda NO PC (via SSH), então use
+# comandos do Windows (cmd/powershell). Comandos com aspas podem
+# exigir escaping — mantenha simples.
+#
+# Exemplos prontos:
+#   GitHub no browser      →  cmd /c start https://github.com
+#   Abrir VS Code          →  code .
+#   Pipeline bash (Git Bash/WSL) →  bash ~/pipelines/run_dengue.sh
+#
+# Substitua os placeholders pelos seus scripts reais.
+
+STREAM_DECK = [
+    {
+        "category": "Bioinfo",
+        "buttons": [
+            {
+                "label": "Dengue Analysis",
+                "command": "echo dengue analysis placeholder",
+            },
+            {
+                "label": "Variant Calling",
+                "command": "echo variant calling placeholder",
+            },
+        ],
+    },
+    {
+        "category": "Automation",
+        "buttons": [
+            {
+                "label": "Backup",
+                "command": "powershell -NoProfile -Command Write-Host backup-ok",
+            },
+            {
+                "label": "GitHub Sync",
+                "command": "powershell -NoProfile -Command Write-Host github-sync-ok",
+            },
+        ],
+    },
+    {
+        "category": "Programs",
+        "buttons": [
+            {
+                "label": "VS Code",
+                "command": "code .",
+            },
+            {
+                "label": "Browser",
+                "command": "cmd /c start https://github.com",
+            },
+        ],
+    },
+]
+
 # ─── Alertas ─────────────────────────────────────────────────
 CPU_WARN_THRESHOLD = 80       # % para alerta amarelo
 CPU_CRIT_THRESHOLD = 95       # % para alerta vermelho

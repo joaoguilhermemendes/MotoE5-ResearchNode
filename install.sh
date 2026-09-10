@@ -39,13 +39,12 @@ info "Instalando dependências do sistema..."
 pkg install -y python python-pip git curl
 
 # ── 3. Instala dependências Python ────────────────────
-info "Instalando dependências Python (rich, psutil)..."
+info "Instalando dependências Python (rich)..."
 echo "  (pode demorar no primeiro install...)"
 echo ""
 
-# Usa python -m pip (mais confiável que pip direto no Termux)
-# NÃO atualiza pip — o Termux gerencia via pkg
-python -m pip install rich psutil
+# psutil NÃO funciona no Termux/Android — o dashboard usa /proc direto
+python -m pip install rich
 
 # ── 4. Torna scripts executáveis ──────────────────────
 info "Configurando scripts..."
@@ -73,18 +72,17 @@ else
     fail "rich NÃO instalado"
 fi
 
-PSUTIL_OK=false
+# psutil não é necessário no Termux — /proc funciona direto
 if python -c "import psutil" 2>/dev/null; then
-    ok "psutil OK"
-    PSUTIL_OK=true
+    ok "psutil OK (bonus)"
 else
-    warn "psutil não instalado (ok, usa /proc)"
+    info "psutil não encontrado (ok, usa /proc no Android)"
 fi
 
 if [ "$RICH_OK" = false ]; then
     echo ""
     fail "ERRO: rich não instalado. Roda manualmente:"
-    echo "    python -m pip install rich psutil"
+    echo "    python -m pip install rich"
     echo ""
     exit 1
 fi

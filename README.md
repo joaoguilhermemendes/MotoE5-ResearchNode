@@ -92,15 +92,35 @@ Edite `config.py` para:
 }
 ```
 
-### Monitorar PC remotamente via SSH
+### SSH: PC → Celular
+
+Configure SSH para rodar o dashboard no celular **pelo computador**.
+
+**No celular (Termux):**
+```bash
+cd ~/research-node
+bash tools/ssh-setup.sh
+```
+
+**No computador (PowerShell):**
+```powershell
+cd research-node
+.\tools\ssh-connect.ps1 -PhoneIp 192.168.1.50
+# Na primeira vez, vai pedir a senha do celular (1x só)
+# Depois conecta sem senha automaticamente
+```
+
+Procura o celular automaticamente:
+```powershell
+.\tools\ssh-connect.ps1 -Scan
+```
+
+### Monitorar PC remotamente
 
 ```bash
-# No Termux, configure:
 export RN_SSH_HOST=192.168.1.100
 export RN_SSH_USER=joao
 export RN_SSH_KEY=~/.ssh/id_rsa
-
-# Ou edite config.py diretamente
 ```
 
 ## Estrutura
@@ -126,6 +146,9 @@ research-node/
 │   ├── check_qc.sh
 │   └── run_qc.sh
 ├── data/                 # Dados e histórico
+├── tools/                # Scripts auxiliares
+│   ├── ssh-setup.sh      # Configura SSH no Termux
+│   └── ssh-connect.ps1   # Conecta do PC ao celular
 ├── install.sh            # Instalador Termux
 └── requirements.txt
 ```

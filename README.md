@@ -130,9 +130,12 @@ Rodar `python app.py` abre um painel com **botões que executam comandos no seu 
 ```bash
 # No Termux:
 python app.py
-# 1ª vez: tela de setup → IP do PC, usuário e porta SSH
+# 1ª vez: tela de setup → IP do PC, usuário, porta SSH e senha do Windows
 # Depois: clique nos botões para rodar comandos no PC
 ```
+
+A senha só é usada pelo **sshpass** (sem prompt interativo, que não funciona
+dentro do Textual) e fica salva em `~/.research-node/ssh.json` (permissão 600).
 
 ### Configurar o PC (uma vez)
 

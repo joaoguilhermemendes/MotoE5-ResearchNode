@@ -36,7 +36,7 @@ pkg update -y && pkg upgrade -y
 
 # ── 2. Instala dependências do sistema ────────────────
 info "Instalando dependências do sistema..."
-pkg install -y python python-pip git curl
+pkg install -y python python-pip git curl openssh sshpass
 
 # ── 3. Instala dependências Python ────────────────────
 info "Instalando dependências Python (rich + textual)..."

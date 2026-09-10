@@ -7,6 +7,7 @@ Screen {
 /* ─── Setup ─────────────────────────────── */
 #setup {
     padding: 1 2;
+    overflow-y: auto;
 }
 
 .field-label {
@@ -34,6 +35,7 @@ Screen {
 /* ─── Deck ──────────────────────────────── */
 #deck {
     padding: 1 2;
+    overflow-y: auto;
 }
 
 .cat-title {
@@ -72,10 +74,13 @@ Screen {
     color: $text;
 }
 
-.output-panel {
+#output-wrap {
     height: 8;
     margin: 1 0 0 0;
     border: round $primary;
+}
+
+#output {
     padding: 0 1;
 }
 
